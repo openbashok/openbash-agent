@@ -61,11 +61,14 @@ You MUST output ONLY valid JSON, no markdown, no explanation. Follow this exact 
 }
 ```
 
-## Rules
+## CRITICAL RULES
 
+- Output ONLY the raw JSON object. No markdown, no ```json blocks, no explanation before or after.
+- The very first character of your response MUST be `{` and the very last character MUST be `}`
 - Be specific about what tools to use and what parameters
 - Prioritize tasks that are more likely to find vulnerabilities
 - Consider the target type (IP, domain, web app) and adjust accordingly
 - Include at least 3-4 phases: Reconnaissance, Scanning, Enumeration, Exploitation
 - Each task should be actionable by the specialist agent
 - Estimate realistic execution times
+- DO NOT wrap the JSON in markdown code blocks. DO NOT add any text before or after the JSON.
