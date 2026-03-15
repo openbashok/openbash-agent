@@ -21,7 +21,7 @@ import fcntl
 from datetime import datetime
 from pathlib import Path
 
-mcp = FastMCP("context", description="Shared pentest context — findings, intel, and coordination between agents")
+mcp = FastMCP("context")
 
 CONTEXT_FILE = os.environ.get("PENTEST_CONTEXT_FILE", "/tmp/pentest_context.json")
 
