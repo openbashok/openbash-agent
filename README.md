@@ -1,4 +1,4 @@
-# autopent
+# openbash
 
 Automated penetration testing with AI agents. Runs multiple specialized Claude Code agents that collaborate through shared context to perform infrastructure, web application, and OSINT assessments.
 
@@ -32,31 +32,31 @@ curl -fsSL https://claude.ai/install.sh | bash
 git clone https://github.com/openbashok/pentest-mcp.git ~/pentest-mcp
 cd ~/pentest-mcp && ./install.sh
 
-# 3. Install autopent (the orchestrator)
-git clone https://github.com/openbashok/autopent.git ~/autopent
-cd ~/autopent && ./install.sh
+# 3. Install openbash-agent (the orchestrator)
+git clone https://github.com/openbashok/openbash-agent.git ~/openbash-agent
+cd ~/openbash-agent && ./install.sh
 ```
 
 ## Usage
 
 ```bash
 # Full pentest, all 3 agents, 20 iterations
-autopent --target example.com
+openbash --target example.com
 
 # Infrastructure only, 30 min max
-autopent --target 192.168.1.0/24 --agents infra -T 30
+openbash --target 192.168.1.0/24 --agents infra -T 30
 
 # Web app deep testing, 50 iterations
-autopent --target https://app.example.com --agents web -i 50 -B 10.0
+openbash --target https://app.example.com --agents web -i 50 -B 10.0
 
 # OSINT recon only
-autopent --target example.com --agents osint -i 10 -T 5
+openbash --target example.com --agents osint -i 10 -T 5
 
 # Full verbose to see everything
-autopent --target example.com -v
+openbash --target example.com -v
 
 # Quiet, just generate report
-autopent --target example.com -q -o report.json
+openbash --target example.com -q -o report.json
 ```
 
 ## Phased pentesting (maximum effectiveness)
@@ -65,14 +65,14 @@ Run in phases, each feeding the next with accumulated intel:
 
 ```bash
 # Phase 1: OSINT (cheap, fast, gathers intel)
-autopent --target example.com --agents osint -i 15 -T 10 -B 3.0 -o phase1.json
+openbash --target example.com --agents osint -i 15 -T 10 -B 3.0 -o phase1.json
 
 # Phase 2: Infrastructure (uses OSINT intel)
-autopent --target example.com --agents infra -i 20 -T 30 -B 8.0 \
+openbash --target example.com --agents infra -i 20 -T 30 -B 8.0 \
   --context-file phase1.context.json --no-plan -o phase2.json
 
 # Phase 3: Web (uses everything found so far)
-autopent --target example.com --agents web -i 30 -T 45 -B 15.0 \
+openbash --target example.com --agents web -i 30 -T 45 -B 15.0 \
   --context-file phase2.context.json --no-plan -o phase3.json
 ```
 

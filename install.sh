@@ -1,11 +1,11 @@
 #!/bin/bash
-# autopent installer
+# openbash installer
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 VENV_DIR="$SCRIPT_DIR/.venv"
 
-echo "=== autopent installer ==="
+echo "=== openbash installer ==="
 echo ""
 
 # Check claude is installed
@@ -23,7 +23,7 @@ elif [ -f "$SCRIPT_DIR/../pentest-mcp/claude_mcp_config.json" ]; then
     echo "  ✓ pentest-mcp ($SCRIPT_DIR/../pentest-mcp)"
 else
     echo "  ✗ pentest-mcp (recommended — git clone https://github.com/openbashok/pentest-mcp.git ~/pentest-mcp && cd ~/pentest-mcp && ./install.sh)"
-    echo "    autopent works without it but agents won't have MCP tools"
+    echo "    openbash works without it but agents won't have MCP tools"
 fi
 
 # Create venv for context server
@@ -35,12 +35,12 @@ echo "  ✓ Python dependencies installed"
 
 # Create wrapper
 mkdir -p "$HOME/bin"
-cat > "$HOME/bin/autopent" << EOF
+cat > "$HOME/bin/openbash" << EOF
 #!/bin/bash
 $VENV_DIR/bin/python $SCRIPT_DIR/pentest.py "\$@"
 EOF
-chmod +x "$HOME/bin/autopent"
-echo "  ✓ Wrapper installed: ~/bin/autopent"
+chmod +x "$HOME/bin/openbash"
+echo "  ✓ Wrapper installed: ~/bin/openbash"
 
 # Add to PATH if needed
 if ! echo "$PATH" | grep -q "$HOME/bin"; then
@@ -56,8 +56,8 @@ echo ""
 echo "=== Installation complete ==="
 echo ""
 echo "Usage:"
-echo "  autopent --target example.com"
-echo "  autopent --target 192.168.1.0/24 --agents infra -T 30"
-echo "  autopent --target https://app.example.com --agents web -i 30 -B 10.0"
+echo "  openbash --target example.com"
+echo "  openbash --target 192.168.1.0/24 --agents infra -T 30"
+echo "  openbash --target https://app.example.com --agents web -i 30 -B 10.0"
 echo ""
-echo "Run 'autopent --help' for all options."
+echo "Run 'openbash --help' for all options."
