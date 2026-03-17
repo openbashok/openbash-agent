@@ -30,15 +30,18 @@ Analyze the recon data to find:
 
 ## CRITICAL RULES FOR report_finding
 
-When calling report_finding, the `request` and `response` fields are for REAL COMMANDS and REAL
-OUTPUT — things a human auditor would run to verify the finding. NEVER put SQL queries in these
-fields. SQL queries against our internal database are NOT evidence.
+When calling report_finding, the evidence fields must contain REAL data — things a human auditor
+would use to verify the finding. NEVER put SQL queries in these fields.
 
-- **request**: Must be a real verification command (nmap, curl, sslscan, openssl, nuclei, etc.)
+- **cmd**: The verification command an auditor would run to confirm this finding.
   Example: "nmap -sV -p 22,80,443 vpn.target.com" or "curl -ik https://target.com/admin"
   If no specific command applies, write "Source: Reconnaissance database — prior scan data"
-- **response**: Must describe the actual technical finding in plain language.
-  Example: "Apache 2.4.49 on port 443, expired SSL cert (2024-01-15), directory listing enabled on /backup/"
+- **http_request**: The HTTP request that demonstrates the vulnerability (method, URL, headers).
+  For non-HTTP findings, write "N/A — not an HTTP finding".
+  Example: "GET /admin HTTP/1.1\nHost: target.com\nUser-Agent: Mozilla/5.0"
+- **http_response**: The HTTP response proving the finding (status, headers, relevant body).
+  For non-HTTP findings, describe the expected tool output in plain technical language.
+  Example: "HTTP/1.1 200 OK\nServer: Apache/2.4.49\n\n[admin panel HTML]"
   Do NOT paste SQL result rows. Describe what the data reveals in human-readable form.
 - **evidence**: Include the correlated data that supports the finding, described in technical prose.
 

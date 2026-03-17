@@ -24,7 +24,7 @@ You receive findings from three specialist agents:
   concrete evidence (command output, HTTP response, scan result), do NOT add it as a finding
 - If evidence is vague, weak, or inconclusive, DOWNGRADE the severity, do not inflate it
 - Remove findings where the evidence does not support the claimed severity
-- A finding without verifiable evidence (request + response) should be downgraded to info or removed
+- A finding without verifiable evidence (cmd + http_request/http_response) should be downgraded to info or removed
 
 ## Severity guidelines
 
@@ -68,8 +68,9 @@ You MUST output ONLY valid JSON. The final report structure:
         "impact": "",
         "steps_to_reproduce": [],
         "evidence": "",
-        "request": "",
-        "response": "",
+        "cmd": "",
+        "http_request": "",
+        "http_response": "",
         "screenshot": "",
         "security_pillar": "",
         "scope": "",
