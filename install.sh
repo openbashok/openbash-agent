@@ -88,34 +88,54 @@ EOF
     mkdir -p /etc/openbash
     if [ ! -f /etc/openbash/openbash.conf ]; then
         cat > /etc/openbash/openbash.conf << 'CONF'
-# /etc/openbash/openbash.conf — system-wide openbash configuration
-# Users can override these in ~/.openbash.conf
-# CLI flags override everything.
-#
-# Priority: CLI flags > env vars > ~/.openbash.conf > /etc/openbash/openbash.conf
+# ┌──────────────────────────────────────────────────────────────────┐
+# │  /etc/openbash/openbash.conf — system-wide openbash config      │
+# │                                                                  │
+# │  Priority: CLI flags > env vars > ~/.openbash.conf > this file   │
+# │  Users can override any setting in ~/.openbash.conf              │
+# └──────────────────────────────────────────────────────────────────┘
 
 # ── API Keys ─────────────────────────────────────────────────────
-# Anthropic API key (required)
-# ANTHROPIC_API_KEY=sk-ant-...
+# Required: at least ANTHROPIC_API_KEY must be set
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+GEMINI_API_KEY=
+XAI_API_KEY=
 
-# ── Defaults ─────────────────────────────────────────────────────
-# MODEL=claude-sonnet-4-20250514
-# AGENT_MODEL=
-# PLANNER_MODEL=
-# ANALYST_MODEL=
-# CURATOR_MODEL=
-# MONITOR_MODEL=
+# ── Model Selection ──────────────────────────────────────────────
+# Default model for all roles. Individual roles can be overridden below.
+# Available: claude-opus-4-6, claude-sonnet-4-6, claude-sonnet-4-20250514, claude-haiku-4-5-20251001
+MODEL=claude-sonnet-4-20250514
 
-# ── Limits ───────────────────────────────────────────────────────
-# ITERATIONS=20
-# TIME_LIMIT=120
-# BUDGET=20.0
-# AGENT_TIMEOUT=600
-# ROUNDS=1
+# Per-role model overrides (leave empty to use MODEL above)
+AGENT_MODEL=
+PLANNER_MODEL=
+ANALYST_MODEL=
+CURATOR_MODEL=
+MONITOR_MODEL=
 
-# ── Agents ───────────────────────────────────────────────────────
-# AGENTS=infra,web,osint
-# OUTPUT=pentest_report.json
+# ── Execution Limits ─────────────────────────────────────────────
+# Max conversation turns per agent
+ITERATIONS=20
+
+# Max total execution time in minutes
+TIME_LIMIT=120
+
+# Max estimated cost in USD (stops agents when exceeded)
+BUDGET=20.0
+
+# Timeout per individual agent in seconds
+AGENT_TIMEOUT=600
+
+# Number of plan-execute-review rounds
+ROUNDS=1
+
+# ── Agent Configuration ──────────────────────────────────────────
+# Which agents to run (comma-separated: infra, web, osint)
+AGENTS=infra,web,osint
+
+# Output report path
+OUTPUT=pentest_report.json
 CONF
         chmod 640 /etc/openbash/openbash.conf
         echo "  ✓ Config created: /etc/openbash/openbash.conf"
