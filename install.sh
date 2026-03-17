@@ -38,6 +38,7 @@ if [ "$GLOBAL_INSTALL" = true ]; then
     if [ "$SCRIPT_DIR" != "$INSTALL_DIR" ]; then
         mkdir -p "$INSTALL_DIR"
         cp -r "$SCRIPT_DIR/pentest.py" "$INSTALL_DIR/"
+        cp -r "$SCRIPT_DIR/providers.py" "$INSTALL_DIR/"
         cp -r "$SCRIPT_DIR/requirements.txt" "$INSTALL_DIR/"
         [ -d "$SCRIPT_DIR/prompts" ] && cp -r "$SCRIPT_DIR/prompts" "$INSTALL_DIR/"
         [ -f "$SCRIPT_DIR/rules.md" ] && cp "$SCRIPT_DIR/rules.md" "$INSTALL_DIR/"
@@ -84,8 +85,16 @@ EOF
     chmod +x /usr/local/bin/openbash
     echo "  ✓ Wrapper installed: /usr/local/bin/openbash"
 
-    # Create /etc/openbash/ config directory and default config
+    # Create /etc/openbash/ config directory and copy models + config
     mkdir -p /etc/openbash
+
+    # Always update models.json (new models may have been added)
+    cp "$SCRIPT_DIR/models.json" /etc/openbash/models.json 2>/dev/null || \
+        cp "$INSTALL_DIR/models.json" /etc/openbash/models.json 2>/dev/null || true
+    if [ -f /etc/openbash/models.json ]; then
+        chmod 644 /etc/openbash/models.json
+        echo "  ✓ Models registry: /etc/openbash/models.json"
+    fi
     if [ ! -f /etc/openbash/openbash.conf ]; then
         cat > /etc/openbash/openbash.conf << 'CONF'
 # ┌──────────────────────────────────────────────────────────────────┐
@@ -96,23 +105,37 @@ EOF
 # └──────────────────────────────────────────────────────────────────┘
 
 # ── API Keys ─────────────────────────────────────────────────────
-# Required: at least ANTHROPIC_API_KEY must be set
+# Set the key for the provider you want to use.
+# Only the key for your chosen provider is required.
 ANTHROPIC_API_KEY=
 OPENAI_API_KEY=
 GEMINI_API_KEY=
 XAI_API_KEY=
 
-# ── Model Selection ──────────────────────────────────────────────
-# Default model for all roles. Individual roles can be overridden below.
-# Available: claude-opus-4-6, claude-sonnet-4-6, claude-sonnet-4-20250514, claude-haiku-4-5-20251001
-MODEL=claude-sonnet-4-20250514
+# ── Model Preset ────────────────────────────────────────────────
+# A preset selects which model to use for each role (agent, planner, etc.)
+# Available presets (defined in /etc/openbash/models.json):
+#   default       — Claude Sonnet 4 (Anthropic)
+#   cheap         — Claude Haiku (Anthropic, cheapest)
+#   best          — Claude Sonnet 4.6 (Anthropic, best)
+#   openai        — GPT-4o (OpenAI)
+#   openai-cheap  — GPT-4.1-mini (OpenAI, cheap)
+#   grok          — Grok 3 (xAI)
+#   gemini        — Gemini 2.5 Pro (Google)
+#   gemini-cheap  — Gemini 2.5 Flash (Google, cheap)
+# To add custom presets or new models, edit /etc/openbash/models.json
+PRESET=default
 
-# Per-role model overrides (leave empty to use MODEL above)
-AGENT_MODEL=
-PLANNER_MODEL=
-ANALYST_MODEL=
-CURATOR_MODEL=
-MONITOR_MODEL=
+# ── Model Overrides ──────────────────────────────────────────────
+# Override the model for ALL roles (ignores preset):
+# MODEL=gpt-4o
+#
+# Override individual roles (takes priority over MODEL and PRESET):
+# AGENT_MODEL=claude-sonnet-4-6
+# PLANNER_MODEL=gpt-4o-mini
+# ANALYST_MODEL=gemini-2.5-pro
+# CURATOR_MODEL=claude-haiku-4-5-20251001
+# MONITOR_MODEL=grok-3
 
 # ── Execution Limits ─────────────────────────────────────────────
 # Max conversation turns per agent

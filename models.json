@@ -1,0 +1,87 @@
+{
+  "_comment": "Openbash model registry. Edit this file to add/remove models.",
+  "_comment2": "Costs are per million tokens (USD). Provider must be: anthropic, openai, xai, or gemini.",
+  "_comment3": "After editing, no restart needed — changes take effect on next run.",
+
+  "models": {
+    "claude-opus-4-6":            { "provider": "anthropic", "cost_in": 15.0,  "cost_out": 75.0,  "tier": "expensive" },
+    "claude-sonnet-4-6":          { "provider": "anthropic", "cost_in": 3.0,   "cost_out": 15.0,  "tier": "balanced"  },
+    "claude-sonnet-4-20250514":   { "provider": "anthropic", "cost_in": 3.0,   "cost_out": 15.0,  "tier": "balanced"  },
+    "claude-haiku-4-5-20251001":  { "provider": "anthropic", "cost_in": 0.80,  "cost_out": 4.0,   "tier": "cheap"     },
+
+    "gpt-4o":                     { "provider": "openai",    "cost_in": 2.50,  "cost_out": 10.0,  "tier": "balanced"  },
+    "gpt-4o-mini":                { "provider": "openai",    "cost_in": 0.15,  "cost_out": 0.60,  "tier": "cheap"     },
+    "gpt-4.1":                    { "provider": "openai",    "cost_in": 2.0,   "cost_out": 8.0,   "tier": "balanced"  },
+    "gpt-4.1-mini":               { "provider": "openai",    "cost_in": 0.40,  "cost_out": 1.60,  "tier": "cheap"     },
+    "gpt-4.1-nano":               { "provider": "openai",    "cost_in": 0.10,  "cost_out": 0.40,  "tier": "cheap"     },
+    "o3":                         { "provider": "openai",    "cost_in": 10.0,  "cost_out": 40.0,  "tier": "expensive" },
+    "o3-mini":                    { "provider": "openai",    "cost_in": 1.10,  "cost_out": 4.40,  "tier": "cheap"     },
+    "o4-mini":                    { "provider": "openai",    "cost_in": 1.10,  "cost_out": 4.40,  "tier": "cheap"     },
+
+    "grok-3":                     { "provider": "xai",       "cost_in": 3.0,   "cost_out": 15.0,  "tier": "balanced"  },
+    "grok-3-mini":                { "provider": "xai",       "cost_in": 0.30,  "cost_out": 0.50,  "tier": "cheap"     },
+
+    "gemini-2.5-pro":             { "provider": "gemini",    "cost_in": 1.25,  "cost_out": 10.0,  "tier": "balanced"  },
+    "gemini-2.5-flash":           { "provider": "gemini",    "cost_in": 0.15,  "cost_out": 0.60,  "tier": "cheap"     },
+    "gemini-2.0-flash":           { "provider": "gemini",    "cost_in": 0.10,  "cost_out": 0.40,  "tier": "cheap"     }
+  },
+
+  "presets": {
+    "default": {
+      "agent":    "claude-sonnet-4-20250514",
+      "planner":  "claude-sonnet-4-20250514",
+      "analyst":  "claude-sonnet-4-20250514",
+      "curator":  "claude-sonnet-4-20250514",
+      "monitor":  "claude-sonnet-4-20250514"
+    },
+    "cheap": {
+      "agent":    "claude-haiku-4-5-20251001",
+      "planner":  "claude-haiku-4-5-20251001",
+      "analyst":  "claude-sonnet-4-20250514",
+      "curator":  "claude-haiku-4-5-20251001",
+      "monitor":  "claude-haiku-4-5-20251001"
+    },
+    "best": {
+      "agent":    "claude-sonnet-4-6",
+      "planner":  "claude-sonnet-4-6",
+      "analyst":  "claude-sonnet-4-6",
+      "curator":  "claude-sonnet-4-6",
+      "monitor":  "claude-sonnet-4-6"
+    },
+    "openai": {
+      "agent":    "gpt-4o",
+      "planner":  "gpt-4o",
+      "analyst":  "gpt-4o",
+      "curator":  "gpt-4o",
+      "monitor":  "gpt-4o"
+    },
+    "openai-cheap": {
+      "agent":    "gpt-4.1-mini",
+      "planner":  "gpt-4.1-mini",
+      "analyst":  "gpt-4.1",
+      "curator":  "gpt-4.1-mini",
+      "monitor":  "gpt-4.1-mini"
+    },
+    "grok": {
+      "agent":    "grok-3",
+      "planner":  "grok-3",
+      "analyst":  "grok-3",
+      "curator":  "grok-3",
+      "monitor":  "grok-3"
+    },
+    "gemini": {
+      "agent":    "gemini-2.5-pro",
+      "planner":  "gemini-2.5-pro",
+      "analyst":  "gemini-2.5-pro",
+      "curator":  "gemini-2.5-pro",
+      "monitor":  "gemini-2.5-pro"
+    },
+    "gemini-cheap": {
+      "agent":    "gemini-2.5-flash",
+      "planner":  "gemini-2.5-flash",
+      "analyst":  "gemini-2.5-pro",
+      "curator":  "gemini-2.5-flash",
+      "monitor":  "gemini-2.5-flash"
+    }
+  }
+}
