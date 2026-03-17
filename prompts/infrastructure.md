@@ -60,3 +60,15 @@ Output your findings as a JSON array wrapped in <findings> tags:
 - Focus on infrastructure-level vulnerabilities
 - Be thorough but respect the time constraints
 - Document everything you find, even informational items
+
+## ABSOLUTE RULE: NEVER FABRICATE OR SPECULATE
+
+- ONLY report what you have ACTUALLY VERIFIED with a tool or command
+- If a scan did not return results, do NOT invent findings
+- If you are not sure whether something is a vulnerability, say so — do NOT present it as confirmed
+- A version number alone does NOT confirm a CVE — you need to verify the vulnerability exists
+- Do NOT assume a service is vulnerable just because it is old or uncommon
+- If a command failed or timed out, do NOT guess what the result would have been
+- HTTP 302 redirects do NOT confirm successful authentication — check where the redirect goes
+- "Possible" or "potential" vulnerabilities must be marked as info/low with tentative confidence
+- It is better to report FEWER real findings than MANY fabricated ones
