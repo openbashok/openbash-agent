@@ -74,6 +74,7 @@ You MUST output ONLY valid JSON. The final report structure:
         "security_pillar": "",
         "scope": "",
         "remediation": "",
+        "remediation_prompt": "",
         "severity": "",
         "agent": ""
       }
