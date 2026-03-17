@@ -84,18 +84,58 @@ EOF
     chmod +x /usr/local/bin/openbash
     echo "  ✓ Wrapper installed: /usr/local/bin/openbash"
 
+    # Create /etc/openbash/ config directory and default config
+    mkdir -p /etc/openbash
+    if [ ! -f /etc/openbash/openbash.conf ]; then
+        cat > /etc/openbash/openbash.conf << 'CONF'
+# /etc/openbash/openbash.conf — system-wide openbash configuration
+# Users can override these in ~/.openbash.conf
+# CLI flags override everything.
+#
+# Priority: CLI flags > env vars > ~/.openbash.conf > /etc/openbash/openbash.conf
+
+# ── API Keys ─────────────────────────────────────────────────────
+# Anthropic API key (required)
+# ANTHROPIC_API_KEY=sk-ant-...
+
+# ── Defaults ─────────────────────────────────────────────────────
+# MODEL=claude-sonnet-4-20250514
+# AGENT_MODEL=
+# PLANNER_MODEL=
+# ANALYST_MODEL=
+# CURATOR_MODEL=
+# MONITOR_MODEL=
+
+# ── Limits ───────────────────────────────────────────────────────
+# ITERATIONS=20
+# TIME_LIMIT=120
+# BUDGET=20.0
+# AGENT_TIMEOUT=600
+# ROUNDS=1
+
+# ── Agents ───────────────────────────────────────────────────────
+# AGENTS=infra,web,osint
+# OUTPUT=pentest_report.json
+CONF
+        chmod 640 /etc/openbash/openbash.conf
+        echo "  ✓ Config created: /etc/openbash/openbash.conf"
+    else
+        echo "  ✓ Config exists: /etc/openbash/openbash.conf (not overwritten)"
+    fi
+
     # Set permissions: readable/executable by all, writable by root
     chmod -R 755 "$INSTALL_DIR"
 
     echo ""
     echo "=== Global installation complete ==="
     echo ""
-    echo "All users can now run:"
-    echo "  export ANTHROPIC_API_KEY=sk-ant-..."
-    echo "  openbash --target example.com"
+    echo "1. Edit the API key in /etc/openbash/openbash.conf:"
+    echo "   nano /etc/openbash/openbash.conf"
     echo ""
-    echo "Each user must set their own ANTHROPIC_API_KEY."
-    echo "To set a system-wide key: echo 'export ANTHROPIC_API_KEY=sk-ant-...' > /etc/profile.d/openbash.sh"
+    echo "2. All users can now run:"
+    echo "   openbash --target example.com"
+    echo ""
+    echo "Users can override settings in ~/.openbash.conf"
     echo ""
     echo "To update: cd $INSTALL_DIR && git pull && ./install.sh --global"
     exit 0
